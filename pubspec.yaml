@@ -4,6 +4,7 @@ version: 2.0.4
 homepage: https://moneytrackio.github.io/tezart/
 repository: https://github.com/moneytrackio/tezart
 issue_tracker: https://github.com/moneytrackio/tezart/issues
+publish_to: none
 
 environment:
   sdk: ">=2.12.0 <4.0.0"
@@ -12,8 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
   bs58check: ^1.0.2 # implementation of base58check
-  bip39: ^1.0.6 # Mnemonic code for generating deterministic keys
-  pointycastle: ^3.0.1 # a library that implements popular crypto algorithms
+  bip39: # Mnemonic code for generating deterministic keys
+    git:
+      url: git@github.com:hawkbee1/bip39.git
+      ref: master
+  pointycastle: ^4.0.0 # a library that implements popular crypto algorithms
   convert: ^3.0.0 # Encoders and decoders for converting between different data representations
   dio: ^5.3.2 # http client
   equatable: ^2.0.0

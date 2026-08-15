@@ -34,12 +34,10 @@ class TezartJsRuntime {
   Future<String?> forge(String operationPayload) async {
     await _ensureInitialized();
     final jsResult = _jsRuntime!.evaluate(
-      """forger.forge($operationPayload).then(
-        function(value) { return value; },
-        function(error) { return ""; }
-      );""",
+      "forger.forge($operationPayload);",
     );
-    final result = _jsRuntime!.handlePromise(jsResult);
+    _jsRuntime!.executePendingJob();
+    final result = await _jsRuntime!.handlePromise(jsResult);
     final value = result.stringResult;
     return value.isEmpty ? null : value;
   }

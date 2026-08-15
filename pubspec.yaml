@@ -41,8 +41,6 @@ dev_dependencies:
   build_runner: ^2.14.1
   mockito: ^5.1.0 # mocks
   test: ^1.20.1
-  envify: ^2.0.0 # .env files management
-  envify_generator: ^2.0.3 # code generation for envify
 
 # The following section is specific to Flutter packages.
 flutter:

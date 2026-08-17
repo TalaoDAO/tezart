@@ -3,7 +3,7 @@
 /// Exposes:
 /// - [RpcInterface]
 /// - [TezartHttpError]
-library rpc_interface;
+library;
 
 export 'impl/rpc_interface.dart';
 export 'impl/tezart_http_error.dart';

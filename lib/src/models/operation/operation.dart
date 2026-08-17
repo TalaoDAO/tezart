@@ -5,7 +5,7 @@
 /// - [OriginationOperation]
 /// - [RevealOperation]
 /// - [TransactionOperation]
-library operation;
+library;
 
 export 'impl/operation.dart';
 export 'impl/origination_operation.dart';

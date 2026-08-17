@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tezart/src/channel/tezart_platform_interface.dart';
 import 'package:tezart/src/channel/tezart_js_runtime.dart';
 
 void main() {

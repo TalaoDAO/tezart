@@ -4,19 +4,15 @@ import 'operation.dart';
 
 class OriginationOperation extends Operation {
   OriginationOperation({
-    required int balance,
+    required int super.balance,
     required List<Map<String, dynamic>> code,
     required dynamic storage, // Micheline storage
-    int? customFee,
-    int? customGasLimit,
-    int? customStorageLimit,
+    super.customFee,
+    super.customGasLimit,
+    super.customStorageLimit,
   }) : super(
           kind: Kinds.origination,
-          balance: balance,
           script: _script(code, storage),
-          customFee: customFee,
-          customGasLimit: customGasLimit,
-          customStorageLimit: customStorageLimit,
         );
 
   String get contractAddress {

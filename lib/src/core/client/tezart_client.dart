@@ -3,7 +3,7 @@
 /// It exposes:
 /// - [TezartClient]
 /// - [TezartNodeError]
-library tezart_client;
+library;
 
 export 'impl/tezart_client.dart';
 export 'impl/tezart_node_error.dart';

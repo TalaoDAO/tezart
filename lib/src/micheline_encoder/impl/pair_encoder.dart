@@ -15,17 +15,17 @@ class PairEncoder implements MichelineEncoder {
   }
 
   List<dynamic> get _args {
-    List type_args = type['args'];
-    final args_iterator = type_args.asMap().entries.map((entry) {
+    List typeArgs = type['args'];
+    final argsIterator = typeArgs.asMap().entries.map((entry) {
       var idx = entry.key;
-      dynamic type_arg = entry.value;
+      dynamic typeArg = entry.value;
 
       return (MichelineEncoder(
-        type: type_arg,
+        type: typeArg,
         params: _paramN(idx),
       ).encode());
     });
-    return args_iterator.toList();
+    return argsIterator.toList();
   }
 
   int get _argsCount {

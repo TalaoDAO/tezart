@@ -2,6 +2,6 @@
 ///
 /// It exposes:
 /// - [MichelineDecoder]
-library micheline_decoder;
+library;
 
 export 'impl/micheline_decoder.dart';

@@ -2,21 +2,14 @@ import 'operation.dart';
 
 class TransactionOperation extends Operation {
   TransactionOperation({
-    required int amount,
-    required String destination,
-    dynamic? params,
-    String? entrypoint,
-    int? customFee,
-    int? customGasLimit,
-    int? customStorageLimit,
+    required int super.amount,
+    required String super.destination,
+    super.params,
+    super.entrypoint,
+    super.customFee,
+    super.customGasLimit,
+    super.customStorageLimit,
   }) : super(
           kind: Kinds.transaction,
-          destination: destination,
-          params: params,
-          amount: amount,
-          entrypoint: entrypoint,
-          customFee: customFee,
-          customGasLimit: customGasLimit,
-          customStorageLimit: customStorageLimit,
         );
 }

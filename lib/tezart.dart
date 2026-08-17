@@ -14,7 +14,7 @@
 /// - [RpcInterface]
 /// - [TezartHttpError]
 
-library tezart;
+library;
 
 export 'src/models/operation/operation.dart';
 export 'src/models/operations_list/operations_list.dart';

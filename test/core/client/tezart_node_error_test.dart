@@ -9,13 +9,13 @@ import '../../env/env.dart';
 void main() {
   const data = 'test';
   const statusCode = 500;
-  final originalException = DioError(
+  final originalException = DioException(
     response: Response(
       data: data,
       statusCode: statusCode,
       requestOptions: RequestOptions(path: Env.tezosNodeUrl),
     ),
-    type: DioErrorType.cancel,
+    type: DioExceptionType.cancel,
     requestOptions: RequestOptions(path: Env.tezosNodeUrl),
   );
   final instance = TezartHttpError(originalException);

@@ -35,7 +35,7 @@ class TezartJsRuntime {
     try {
       await _ensureInitialized();
       final jsResult = _jsRuntime!.evaluate(
-        "forger.forge(" + operationPayload + ");",
+        "forger.forge($operationPayload);",
       );
       _jsRuntime!.executePendingJob();
       final result = await _jsRuntime!.handlePromise(jsResult);

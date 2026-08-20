@@ -1,5 +1,5 @@
-import "package:flutter/services.dart" show rootBundle;
-import "package:flutter_js/flutter_js.dart";
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_js/flutter_js.dart';
 
 /// Dart-side JavaScript runtime that replaces the native LiquidCore (Android)
 /// and JavaScriptCore (iOS) platform channels.
@@ -32,14 +32,18 @@ class TezartJsRuntime {
   ///
   /// Returns the forged hex string, or `null` on error.
   Future<String?> forge(String operationPayload) async {
-    await _ensureInitialized();
-    final jsResult = _jsRuntime!.evaluate(
-      "forger.forge($operationPayload);",
-    );
-    _jsRuntime!.executePendingJob();
-    final result = await _jsRuntime!.handlePromise(jsResult);
-    final value = result.stringResult;
-    return value.isEmpty ? null : value;
+    try {
+      await _ensureInitialized();
+      final jsResult = _jsRuntime!.evaluate(
+        "forger.forge(" + operationPayload + ");",
+      );
+      _jsRuntime!.executePendingJob();
+      final result = await _jsRuntime!.handlePromise(jsResult);
+      final value = result.stringResult;
+      return value.isEmpty ? null : value;
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Releases the underlying JavaScript runtime resources.

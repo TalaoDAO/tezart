@@ -8,7 +8,7 @@ issue_tracker: https://github.com/moneytrackio/tezart/issues
 publish_to: none
 
 environment:
-  sdk: "3.12.2"
+  sdk: ^3.13.1
 
 dependencies:
   flutter:

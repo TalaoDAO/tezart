@@ -8,17 +8,17 @@ void main() {
   group('TezartJsRuntime localForge tests', () {
     test('it successfully forges a transaction operation payload', () async {
       final payload = {
-        'branch': 'BLockGenesisGenesisGenesisGenesisGenesisf3b2d1',
+        'branch': 'BMHBtAaUv59LipV1czwZ5iQkxEktPJDE7A9sYXPkPeRzbBasNY8',
         'contents': [
           {
             'kind': 'transaction',
-            'source': 'tz1edmE1ZtizUW2qRj5XA2BLuiR8pRDnoBRg',
+            'source': 'tz1QCVQinE8iVj1H2fckqx6oiM85CNJSK9Sx',
             'fee': '1272',
             'counter': '30737',
             'gas_limit': '10400',
             'storage_limit': '0',
             'amount': '1000000',
-            'destination': 'tz1gja25C6w7C1XFLwjhcX1Cg8Q2zpv5wJGG',
+            'destination': 'tz1QCVQinE8iVj1H2fckqx6oiM85CNJSK9Sx',
           }
         ]
       };
@@ -29,7 +29,6 @@ void main() {
       expect(result, isNotNull);
       expect(result, isNotEmpty);
       expect(RegExp(r'^[0-9a-fA-F]+$').hasMatch(result!), true);
-      print('Local forge output hex: ');
     });
   });
 }

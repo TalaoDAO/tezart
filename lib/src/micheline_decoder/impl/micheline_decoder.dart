@@ -22,7 +22,7 @@ class MichelineDecoder {
     return _isAnonymous ? decodedValue : {_annot: decodedValue};
   }
 
-  // TODO: duplicated code, refactor this
+  // TODO(hawkbee): duplicated code, refactor this
   bool get _isAnonymous {
     return !(type.containsKey('annots') && type['annots'] != null);
   }

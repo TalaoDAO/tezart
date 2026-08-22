@@ -48,15 +48,18 @@ class TezartNodeError extends CommonException {
 
   Map<TezartNodeErrorTypes, String> get staticErrorsMessages {
     return {
-      TezartNodeErrorTypes.alreadyRevealedKey: "You're trying to reveal an already revealed key.",
+      TezartNodeErrorTypes.alreadyRevealedKey:
+          "You're trying to reveal an already revealed key.",
       TezartNodeErrorTypes.counterError: 'A counter error occured',
       TezartNodeErrorTypes.unhandled: 'Unhandled error: $_errorMsg',
     };
   }
 
   final dynamicErrorMessages = {
-    TezartNodeErrorTypes.monitoringTimedOut: (String operationId) => 'Monitoring the operation $operationId timed out',
-    TezartNodeErrorTypes.simulationFailed: (String operationKind, String reason) =>
+    TezartNodeErrorTypes.monitoringTimedOut: (String operationId) =>
+        'Monitoring the operation $operationId timed out',
+    TezartNodeErrorTypes
+        .simulationFailed: (String operationKind, String reason) =>
         'The simulation of the operation: "$operationKind" failed with error(s) : $reason',
   };
 
@@ -67,17 +70,20 @@ class TezartNodeError extends CommonException {
   ///     If not, it will use `staticErrorMessages[type]` or `dynamicErrorMessages[type]` (in this priority order).
   /// - [metadata] is optional and must include metadata used to compute the message.
   ///     example: `{ 'operationId': 'opId' }` for monitoring time out errors.
-  TezartNodeError({required TezartNodeErrorTypes type, String? message, metadata})
-      : _inputType = type,
-        _inputMessage = message,
-        metadata = metadata ?? {},
-        cause = null;
+  TezartNodeError({
+    required TezartNodeErrorTypes type,
+    String? message,
+    metadata,
+  }) : _inputType = type,
+       _inputMessage = message,
+       metadata = metadata ?? {},
+       cause = null;
 
   /// Named constructor to construct [TezartNodeError] by passing a [TezartHttpError] object.
   TezartNodeError.fromHttpError(this.cause)
-      : _inputType = null,
-        _inputMessage = null,
-        metadata = {};
+    : _inputType = null,
+      _inputMessage = null,
+      metadata = {};
 
   /// Type of this.
   TezartNodeErrorTypes get type => _inputType ?? _computedType;
@@ -102,7 +108,7 @@ class TezartNodeError extends CommonException {
     return TezartNodeErrorTypes.unhandled;
   }
 
-  // TODO: what to do when there is multiple errors ?
+  // TODO(hawkbee): what to do when there is multiple errors ?
   String? get _errorId {
     final response = cause?.responseBody;
 
@@ -134,9 +140,14 @@ class TezartNodeError extends CommonException {
 
     switch (type) {
       case TezartNodeErrorTypes.monitoringTimedOut:
-        return dynamicErrorMessages[type]!(metadata.fetch<String>('operationId'));
+        return dynamicErrorMessages[type]!(
+          metadata.fetch<String>('operationId'),
+        );
       case TezartNodeErrorTypes.simulationFailed:
-        return dynamicErrorMessages[type]!(metadata.fetch<String>('operationKind'), metadata.fetch<String>('reason'));
+        return dynamicErrorMessages[type]!(
+          metadata.fetch<String>('operationKind'),
+          metadata.fetch<String>('reason'),
+        );
       default:
         throw UnimplementedError('Unimplemented error type $type');
     }

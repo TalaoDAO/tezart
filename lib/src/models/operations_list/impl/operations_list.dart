@@ -31,7 +31,11 @@ class OperationsList {
   final RpcInterface rpcInterface;
   Map<String, dynamic>? _constants;
 
-  OperationsList({this.source, required this.publicKey, required this.rpcInterface});
+  OperationsList({
+    this.source,
+    required this.publicKey,
+    required this.rpcInterface,
+  });
 
   /// Prepends [op] to this
   void prependOperation(Operation op) {
@@ -51,7 +55,8 @@ class OperationsList {
   /// It sets the simulationResult for all the elements of [operations]
   Future<void> preapply() async {
     await _catchHttpError<void>(() async {
-      if (result.signature == null) throw ArgumentError.notNull('result.signature');
+      if (result.signature == null)
+        throw ArgumentError.notNull('result.signature');
 
       final simulationResults = await rpcInterface.preapplyOperations(
         operationsList: this,
@@ -91,8 +96,10 @@ class OperationsList {
   /// It sets result.signature\
   /// It must be run after [forge], because it needs result.forgedOperation to be set
   Future<void> sign(SignCallback? signCallback) async {
-    if (result.forgedOperation == null) throw ArgumentError.notNull('result.forgedOperation');
-    if (signCallback == null && source == null) throw ArgumentError.notNull('source or signCallback');
+    if (result.forgedOperation == null)
+      throw ArgumentError.notNull('result.forgedOperation');
+    if (signCallback == null && source == null)
+      throw ArgumentError.notNull('source or signCallback');
 
     if (signCallback != null) {
       final signature = await signCallback(result.forgedOperation!);
@@ -114,10 +121,12 @@ class OperationsList {
   /// It must be run after [sign] because it needs result.signature to be set
   Future<void> inject() async {
     await _catchHttpError<void>(() async {
-      if (result.signature == null) throw ArgumentError.notNull('result.signature');
+      if (result.signature == null)
+        throw ArgumentError.notNull('result.signature');
 
-      result.id = await rpcInterface
-          .injectOperation(result.signature!.hexIncludingPayload);
+      result.id = await rpcInterface.injectOperation(
+        result.signature!.hexIncludingPayload,
+      );
     });
   }
 
@@ -132,7 +141,10 @@ class OperationsList {
   /// Executes this
   ///
   /// It runs [estimate], [simulate] and [broadcast] respectively
-  Future<void> execute(SignCallback? signCallback, {int? baseOperationCustomFee}) async {
+  Future<void> execute(
+    SignCallback? signCallback, {
+    int? baseOperationCustomFee,
+  }) async {
     await _retryOnCounterError<void>(() async {
       await estimate(baseOperationCustomFee: baseOperationCustomFee);
       await broadcast(signCallback);
@@ -174,7 +186,7 @@ class OperationsList {
 
   /// Computes and sets the counters of [operations]
   Future<void> computeCounters() async {
-    // TODO: use expirable cache based on time between blocks so that we can
+    // TODO(hawkbee): use expirable cache based on time between blocks so that we can
     // call this method before forge, sign, preapply and run
     await _catchHttpError<void>(() async {
       final firstOperation = operations.first;
@@ -189,16 +201,20 @@ class OperationsList {
 
   /// It sets the limits of [operations] to the hard limits of the chain
   Future<void> setHardLimits() async {
-    await Future.wait(operations.map((operation) async {
-      await operation.setLimits(OperationHardLimitsSetterVisitor());
-    }));
+    await Future.wait(
+      operations.map((operation) async {
+        await operation.setLimits(OperationHardLimitsSetterVisitor());
+      }),
+    );
   }
 
   /// It sets the optimal limits of [operations]
   Future<void> setLimits() async {
-    await Future.wait(operations.map((operation) async {
-      await operation.setLimits(OperationLimitsSetterVisitor());
-    }));
+    await Future.wait(
+      operations.map((operation) async {
+        await operation.setLimits(OperationLimitsSetterVisitor());
+      }),
+    );
 
     // resimulate to check that limit computation is valid. Remove this in a stable version ??
     // await simulate();
@@ -208,9 +224,15 @@ class OperationsList {
   ///
   /// The computation is based on the bakers default config.
   Future<void> computeFees({int? baseOperationCustomFee}) async {
-    await Future.wait(operations.map((operation) async {
-      await operation.setLimits(OperationFeesSetterVisitor(baseOperationCustomFee: baseOperationCustomFee));
-    }));
+    await Future.wait(
+      operations.map((operation) async {
+        await operation.setLimits(
+          OperationFeesSetterVisitor(
+            baseOperationCustomFee: baseOperationCustomFee,
+          ),
+        );
+      }),
+    );
   }
 
   /// Monitors this
@@ -218,7 +240,9 @@ class OperationsList {
     if (result.id == null) throw ArgumentError.notNull('result.id');
 
     log.info('request to monitorOperation ${result.id}');
-    final blockHash = await rpcInterface.monitorOperation(operationId: result.id!);
+    final blockHash = await rpcInterface.monitorOperation(
+      operationId: result.id!,
+    );
     result.blockHash = blockHash;
   }
 
@@ -228,16 +252,20 @@ class OperationsList {
   }
 
   Future<T> _catchHttpError<T>(Future<T> Function() func) {
-    return catchHttpError<T>(func, onError: (TezartHttpError e) {
-      log.severe('Http Error', e);
-    });
+    return catchHttpError<T>(
+      func,
+      onError: (TezartHttpError e) {
+        log.severe('Http Error', e);
+      },
+    );
   }
 
   Future<T> _retryOnCounterError<T>(func) {
     final r = RetryOptions(maxAttempts: 5);
     return r.retry<T>(
       func,
-      retryIf: (e) => e is TezartNodeError && e.type == TezartNodeErrorTypes.counterError,
+      retryIf: (e) =>
+          e is TezartNodeError && e.type == TezartNodeErrorTypes.counterError,
     );
   }
 }

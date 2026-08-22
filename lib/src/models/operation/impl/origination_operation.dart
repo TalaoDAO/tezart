@@ -10,22 +10,26 @@ class OriginationOperation extends Operation {
     super.customFee,
     super.customGasLimit,
     super.customStorageLimit,
-  }) : super(
-          kind: Kinds.origination,
-          script: _script(code, storage),
-        );
+  }) : super(kind: Kinds.origination, script: _script(code, storage));
 
   String get contractAddress {
     return memo0<String>(() {
-      if (operationsList == null) throw ArgumentError.notNull('operation.operationsList');
+      if (operationsList == null)
+        throw ArgumentError.notNull('operation.operationsList');
 
-      // TODO: why does the node return a list of originated contracts ?
+      // TODO(hawkbee): why does the node return a list of originated contracts ?
       return operationsList!
-          .operations.first.simulationResult?['metadata']['operation_result']['originated_contracts'].first;
+          .operations
+          .first
+          .simulationResult?['metadata']['operation_result']['originated_contracts']
+          .first;
     })();
   }
 
-  static Map<String, dynamic> _script(List<Map<String, dynamic>> code, dynamic storage) {
+  static Map<String, dynamic> _script(
+    List<Map<String, dynamic>> code,
+    dynamic storage,
+  ) {
     return {'code': code, 'storage': storage};
   }
 }

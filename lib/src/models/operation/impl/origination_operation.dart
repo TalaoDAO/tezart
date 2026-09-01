@@ -14,8 +14,9 @@ class OriginationOperation extends Operation {
 
   String get contractAddress {
     return memo0<String>(() {
-      if (operationsList == null)
+      if (operationsList == null) {
         throw ArgumentError.notNull('operation.operationsList');
+      }
 
       // TODO(hawkbee): why does the node return a list of originated contracts ?
       return operationsList!

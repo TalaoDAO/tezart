@@ -43,6 +43,14 @@ class TezartHttpClient {
       contentType: 'application/json',
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
+      // Some RPC nodes -- or a load balancer in front of them -- close idle
+      // keep-alive connections more aggressively than Dio's client-side pool
+      // expires them. Reusing a pooled connection the server already closed
+      // surfaces as "Connection closed before full header was received."
+      // This trades a per-request TCP/TLS handshake for immunity to that
+      // race, which is a fine trade given how infrequently this client is
+      // actually called.
+      persistentConnection: false,
     );
     this.client = http_client.Dio(options);
     this.client.interceptors.add(PrettyDioLogger(

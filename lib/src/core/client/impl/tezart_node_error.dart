@@ -125,7 +125,11 @@ class TezartNodeError extends CommonException {
     try {
       return response.first['msg'] ?? response.first['id'];
     } on NoSuchMethodError {
-      return cause?.clientError.message;
+      // No structured node error body: fall back to the http error's own
+      // message, which names the Dio failure kind and the failing request.
+      // `clientError.message` alone is frequently null, which is what made
+      // these failures surface as the useless "Unhandled error: null".
+      return cause?.message;
     }
   }
 

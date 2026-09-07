@@ -51,10 +51,20 @@ class TezartHttpError extends CommonException {
   @override
   String get key => EnumUtil.enumToString(type);
   @override
-  String get message =>
-      _response?.statusMessage ??
-      staticErrorsMessages[type] ??
-      'Network Error (${clientError.type}): ${clientError.error ?? clientError.message}';
+  String get message {
+    // A node error response carries its own explanation; prefer it.
+    final statusMessage = _response?.statusMessage;
+    if (statusMessage != null) return statusMessage;
+
+    // Otherwise the failure is transport level and says nothing by itself, so
+    // name the failure kind, the request that failed and the underlying error.
+    final base =
+        staticErrorsMessages[type] ?? 'Network Error (${clientError.type})';
+    final detail = clientError.error ?? clientError.message;
+
+    return '$base on ${clientError.requestOptions.uri}'
+        '${detail == null ? '' : ': $detail'}';
+  }
   @override
   http_client.DioException get originalException => clientError;
 }

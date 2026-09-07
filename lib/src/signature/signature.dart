@@ -1,4 +1,4 @@
 /// A library that export the classes related to signatures
-library signature;
+library;
 
 export 'impl/signature.dart';

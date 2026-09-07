@@ -6,27 +6,17 @@ part of 'operation.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Map<String, dynamic> _$OperationToJson(Operation instance) {
-  final val = <String, dynamic>{
-    'kind': Operation._kindToString(instance.kind),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('destination', instance.destination);
-  writeNotNull('amount', Operation._toString(instance.amount));
-  writeNotNull('balance', Operation._toString(instance.balance));
-  writeNotNull('counter', Operation._toString(instance.counter));
-  writeNotNull('script', instance.script);
-  writeNotNull('gas_limit', Operation._toString(instance.gasLimit));
-  writeNotNull('fee', Operation._toString(instance.fee));
-  writeNotNull('storage_limit', Operation._toString(instance.storageLimit));
-  val['source'] = instance.source;
-  writeNotNull('parameters', instance.parameters);
-  writeNotNull('public_key', instance.publicKey);
-  return val;
-}
+Map<String, dynamic> _$OperationToJson(Operation instance) => <String, dynamic>{
+  'kind': Operation._kindToString(instance.kind),
+  'destination': ?instance.destination,
+  'amount': ?Operation._toString(instance.amount),
+  'balance': ?Operation._toString(instance.balance),
+  'counter': ?Operation._toString(instance.counter),
+  'script': ?instance.script,
+  'gas_limit': ?Operation._toString(instance.gasLimit),
+  'fee': ?Operation._toString(instance.fee),
+  'storage_limit': ?Operation._toString(instance.storageLimit),
+  'source': instance.source,
+  'parameters': ?instance.parameters,
+  'public_key': ?instance.publicKey,
+};

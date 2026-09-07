@@ -3,7 +3,7 @@
 /// It exposes:
 /// - [Keystore]
 /// - [CryptoError]
-library keystore;
+library;
 
 export 'impl/keystore.dart';
 export 'package:tezart/src/crypto/impl/crypto_error.dart';

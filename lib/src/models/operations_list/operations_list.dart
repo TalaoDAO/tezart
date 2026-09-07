@@ -3,7 +3,7 @@
 /// It exposes:
 /// - [OperationsList]
 /// - [OperationsListResult]
-library operations_list;
+library;
 
 export 'impl/operations_list.dart';
 export 'impl/operations_list_result.dart';

@@ -22,7 +22,7 @@ void main() {
   void testFailingRequest(Function subject, Function callback) {
     setUp(() {
       when(callback()).thenAnswer((_) async {
-        throw DioError(requestOptions: RequestOptions(path: url));
+        throw DioException(requestOptions: RequestOptions(path: url));
       });
     });
 

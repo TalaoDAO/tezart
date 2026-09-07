@@ -4,32 +4,33 @@ import 'operation.dart';
 
 class OriginationOperation extends Operation {
   OriginationOperation({
-    required int balance,
+    required int super.balance,
     required List<Map<String, dynamic>> code,
     required dynamic storage, // Micheline storage
-    int? customFee,
-    int? customGasLimit,
-    int? customStorageLimit,
-  }) : super(
-          kind: Kinds.origination,
-          balance: balance,
-          script: _script(code, storage),
-          customFee: customFee,
-          customGasLimit: customGasLimit,
-          customStorageLimit: customStorageLimit,
-        );
+    super.customFee,
+    super.customGasLimit,
+    super.customStorageLimit,
+  }) : super(kind: Kinds.origination, script: _script(code, storage));
 
   String get contractAddress {
     return memo0<String>(() {
-      if (operationsList == null) throw ArgumentError.notNull('operation.operationsList');
+      if (operationsList == null) {
+        throw ArgumentError.notNull('operation.operationsList');
+      }
 
-      // TODO: why does the node return a list of originated contracts ?
+      // TODO(hawkbee): why does the node return a list of originated contracts ?
       return operationsList!
-          .operations.first.simulationResult?['metadata']['operation_result']['originated_contracts'].first;
+          .operations
+          .first
+          .simulationResult?['metadata']['operation_result']['originated_contracts']
+          .first;
     })();
   }
 
-  static Map<String, dynamic> _script(List<Map<String, dynamic>> code, dynamic storage) {
+  static Map<String, dynamic> _script(
+    List<Map<String, dynamic>> code,
+    dynamic storage,
+  ) {
     return {'code': code, 'storage': storage};
   }
 }

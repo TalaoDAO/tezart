@@ -86,6 +86,10 @@ class TezartHttpClient {
           queryParameters: params,
           options: http_client.Options(
             responseType: http_client.ResponseType.stream,
+            // A head-monitoring stream stays open between blocks, so the
+            // generic receiveTimeout does not apply to it -- the caller
+            // governs how long to wait between chunks.
+            receiveTimeout: Duration.zero,
           ), // set responseType to `stream`
         ),
       ),

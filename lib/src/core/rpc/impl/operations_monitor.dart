@@ -10,14 +10,21 @@ class OperationsMonitor {
 
   OperationsMonitor(this.rpcInterface);
 
+  /// Number of new blocks to watch before giving up on an injected operation.
+  ///
+  /// Mainnet blocks are ~6s apart, so the previous value of 2 gave the
+  /// operation only ~12s to be included and reported a spurious
+  /// `monitoringTimedOut` for transfers that were merely a little late.
+  static const defaultNbOfBlocksToWait = 10;
+
   Future<String> monitor({
     required String chain,
     required String level,
     required String operationId,
+    int nbOfBlocksToWait = defaultNbOfBlocksToWait,
   }) async {
     // TODO(hawkbee): compute timeout based on time between blocks (problem in the CI when the blockchain just started)
     const timeoutBetweenChunks = Duration(minutes: 3);
-    const nbOfBlocksToWait = 2;
 
     final predHash = await _predecessorHash(chain: chain, level: level);
     final isOpIdIncludedInPredBlock = await _isOperationIdIncludedInBlock(

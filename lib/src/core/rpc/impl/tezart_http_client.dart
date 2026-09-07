@@ -12,24 +12,37 @@ class TezartHttpClient {
   late http_client.Dio client;
   final String url;
 
+  /// Default network timeouts.
+  ///
+  /// 5s was too aggressive: `run_operation` simulation on a public node
+  /// regularly takes longer than that, which surfaced as a receive timeout
+  /// in the middle of an otherwise valid transfer.
+  static const defaultConnectTimeout = Duration(seconds: 30);
+  static const defaultReceiveTimeout = Duration(seconds: 30);
+
   // Add client as optional parameter for testing
-  TezartHttpClient(this.url, {http_client.Dio? client}) {
+  TezartHttpClient(
+    this.url, {
+    http_client.Dio? client,
+    Duration connectTimeout = defaultConnectTimeout,
+    Duration receiveTimeout = defaultReceiveTimeout,
+  }) {
     // ensure that the url ends with '/' (double / is ok)
     final baseUrl = '$url/';
 
     if (client != null) {
       this.client = client;
       this.client.options.baseUrl = baseUrl;
-      this.client.options.connectTimeout = const Duration(seconds: 5);
-      this.client.options.receiveTimeout = const Duration(seconds: 5);
+      this.client.options.connectTimeout = connectTimeout;
+      this.client.options.receiveTimeout = receiveTimeout;
       return;
     }
 
     final options = http_client.BaseOptions(
       baseUrl: baseUrl,
       contentType: 'application/json',
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
+      connectTimeout: connectTimeout,
+      receiveTimeout: receiveTimeout,
     );
     this.client = http_client.Dio(options);
     this.client.interceptors.add(PrettyDioLogger(
@@ -85,7 +98,9 @@ class TezartHttpClient {
     return r.retry<T>(
       func,
       retryIf: (e) {
-        return e is TezartHttpError && e.originalException is SocketException;
+        // `originalException` is the DioException itself; the socket failure
+        // it wraps lives in its `error` field.
+        return e is TezartHttpError && e.clientError.error is SocketException;
       },
     );
   }

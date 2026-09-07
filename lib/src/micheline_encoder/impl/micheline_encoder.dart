@@ -31,7 +31,7 @@ class MichelineEncoder {
         encoder = TimestampEncoder(_params);
         break;
       case 'string':
-      // TODO: implement validators of these types
+      // TODO(hawkbee): implement validators of these types
       case 'address':
       case 'contract':
       case 'key':

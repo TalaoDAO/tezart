@@ -28,7 +28,7 @@ Future<void> main() async {
       'edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7');
   final destinationKeystore = Keystore.random();
   final client = TezartClient('http://localhost:20000');
-  final amount = 10000;
+  const amount = 10000;
   final operationsList = await client.transferOperation(
     source: sourceKeystore,
     publicKey: sourceKeystore.publicKey,

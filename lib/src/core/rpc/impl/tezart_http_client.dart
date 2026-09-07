@@ -93,7 +93,7 @@ class TezartHttpClient {
   Future<T> _handleClientError<T>(Function func) async {
     try {
       return await func();
-    } on http_client.DioError catch (e) {
+    } on http_client.DioException catch (e) {
       log.severe('Error in http call', e);
       throw TezartHttpError(e);
     }

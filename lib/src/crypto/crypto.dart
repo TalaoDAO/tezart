@@ -1,6 +1,6 @@
 /// Exports low-level cryptographic operations needed to sign Tezos
 /// transactions.
-library crypto;
+library;
 
 export 'impl/encode_decode.dart';
 export 'impl/encrypted_secret_key_to_seed.dart';

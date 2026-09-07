@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -43,7 +44,9 @@ class Keystore extends Equatable {
   factory Keystore.fromSecretKey(String secretKey) {
     return crypto.catchUnhandledErrors(() {
       if (secretKey.length != _secretKeyLength) {
-        throw crypto.CryptoError(type: crypto.CryptoErrorTypes.secretKeyLengthError);
+        throw crypto.CryptoError(
+          type: crypto.CryptoErrorTypes.secretKeyLengthError,
+        );
       }
       _validateChecksum(secretKey);
 
@@ -79,17 +82,24 @@ class Keystore extends Equatable {
   /// ```
   ///
   /// Throws [CryptoError] if [mnemonic] is invalid.
-  factory Keystore.fromMnemonic(String mnemonic, {String email = '', String password = ''}) {
+  factory Keystore.fromMnemonic(
+    String mnemonic, {
+    String email = '',
+    String password = '',
+  }) {
     return crypto.catchUnhandledErrors(() {
       final passphrase = '$email$password';
-      final seedBytes = crypto.seedBytesFromMnemonic(mnemonic, passphrase: passphrase);
-      final seed = crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: seedBytes);
+      final seedBytes = crypto.seedBytesFromMnemonic(
+        mnemonic,
+        passphrase: passphrase,
+      );
+      final seed = crypto.encodeWithPrefix(
+        prefix: _seedPrefix,
+        bytes: seedBytes,
+      );
       final secretKey = crypto.seedToSecretKey(seed);
 
-      return Keystore._(
-        secretKey: secretKey,
-        mnemonic: mnemonic,
-      );
+      return Keystore._(secretKey: secretKey, mnemonic: mnemonic);
     });
   }
 
@@ -99,7 +109,9 @@ class Keystore extends Equatable {
   ) {
     return crypto.catchUnhandledErrors(() {
       if (encryptedSecretKey.length != _encryptedSecretKeyLength) {
-        throw crypto.CryptoError(type: crypto.CryptoErrorTypes.encryptedSecretKeyLengthError);
+        throw crypto.CryptoError(
+          type: crypto.CryptoErrorTypes.encryptedSecretKeyLengthError,
+        );
       }
 
       final seed = crypto.encryptedSecretKeyToSeed(
@@ -125,48 +137,42 @@ class Keystore extends Equatable {
 
   /// The public key of this.
   String get publicKey => crypto.catchUnhandledErrors(() {
-        final seedBytes = crypto.decodeWithoutPrefix(seed);
-        var pk = crypto.publicKeyBytesFromSeedBytes(seedBytes);
+    final seedBytes = crypto.decodeWithoutPrefix(seed);
+    var pk = crypto.publicKeyBytesFromSeedBytes(seedBytes);
 
-        return crypto.encodeWithPrefix(
-          prefix: _publicKeyPrefix,
-          bytes: Uint8List.fromList(pk.toList()),
-        );
-      });
+    return crypto.encodeWithPrefix(
+      prefix: _publicKeyPrefix,
+      bytes: Uint8List.fromList(pk.toList()),
+    );
+  });
 
   /// The address of this.
   String get address => crypto.catchUnhandledErrors(() {
-        final publicKeyBytes = crypto.decodeWithoutPrefix(publicKey);
-        final hash = crypto.hashWithDigestSize(
-          size: 160,
-          bytes: publicKeyBytes,
-        );
+    final publicKeyBytes = crypto.decodeWithoutPrefix(publicKey);
+    final hash = crypto.hashWithDigestSize(size: 160, bytes: publicKeyBytes);
 
-        return crypto.encodeWithPrefix(
-          prefix: _addressPrefix,
-          bytes: hash,
-        );
-      });
+    return crypto.encodeWithPrefix(prefix: _addressPrefix, bytes: hash);
+  });
 
   /// The seed of this.
   String get seed => crypto.catchUnhandledErrors(() {
-        return crypto.secretKeyToSeed(secretKey);
-      });
+    return crypto.secretKeyToSeed(secretKey);
+  });
 
   /// Returns [tezart.Signature] of [bytes] signed by this.
   Signature signBytes(Uint8List bytes) => crypto.catchUnhandledErrors(() {
-        return Signature.fromBytes(bytes: bytes, keystore: this);
-      });
+    return Signature.fromBytes(bytes: bytes, keystore: this);
+  });
 
   /// Returns [tezart.Signature] of [data] signed by this.
   Signature signHex(String data) => crypto.catchUnhandledErrors(() {
-        return Signature.fromHex(data: data, keystore: this);
-      });
+    return Signature.fromHex(data: data, keystore: this);
+  });
 
   @override
   List<Object> get props => [secretKey];
 
-  // TODO: refactor : ChecksumValidator
+  // TODO(hawkbee): refactor : ChecksumValidator
   static void _validateChecksum(String string) {
     if (!crypto.isChecksumValid(string)) {
       throw crypto.CryptoError(type: crypto.CryptoErrorTypes.invalidChecksum);

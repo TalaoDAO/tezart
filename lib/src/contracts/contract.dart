@@ -3,7 +3,7 @@
 /// It exposes:
 /// - [Contract]
 /// - [BigMap]
-library contract;
+library;
 
 export 'impl/contract.dart';
 export 'impl/big_map.dart';

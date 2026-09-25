@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_function_declarations_over_variables
 
 @Timeout(Duration(seconds: 60))
+import 'package:mockito/mockito.dart' show Fake;
 import 'package:test/test.dart';
 import 'package:tezart/src/models/operation/impl/operation_fees_setter_visitor.dart';
 import 'package:tezart/tezart.dart';
@@ -18,7 +19,16 @@ void main() {
     final subject = () => OperationFeesSetterVisitor().visit(operation);
 
     setUp(() {
-      operation = Operation(kind: Kinds.generic, customFee: customFee);
+      // visit also computes operation.totalFee, which needs the limits, the
+      // operations list (forged operation) and the chain's cost_per_byte.
+      operation = Operation(kind: Kinds.generic, customFee: customFee)
+        ..gasLimit = 1000
+        ..storageLimit = 300;
+      final operationsList = OperationsList(
+        publicKey: originatorKeystore.publicKey,
+        rpcInterface: _FakeRpcInterface(),
+      )..appendOperation(operation);
+      operationsList.result.forgedOperation = '00' * 100;
     });
 
     test('it sets operation.fee using customFee', () async {
@@ -48,4 +58,9 @@ void main() {
       expect(operation.fee, lessThan(64657));
     });
   });
+}
+
+class _FakeRpcInterface extends Fake implements RpcInterface {
+  @override
+  Future<Map<String, dynamic>> constants([dynamic chain, dynamic level]) async => {'cost_per_byte': '250'};
 }

@@ -64,10 +64,8 @@ void main() {
       test("calls client's post", () async {
         await subject();
 
-        verifyInOrder([
-          client.options,
-          client.post(path, data: data),
-        ]);
+        verify(client.options);
+        verify(client.post(path, data: data));
 
         verifyNoMoreInteractions(client);
       });

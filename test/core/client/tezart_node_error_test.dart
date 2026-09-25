@@ -56,7 +56,13 @@ void main() {
     final subject = () => instance.message;
 
     test('it returns a valid error message', () {
-      expect(subject(), equals('The request has been cancelled'));
+      expect(
+        subject(),
+        equals(
+          'The request has been cancelled on '
+          '${originalException.requestOptions.uri}',
+        ),
+      );
     });
   });
 

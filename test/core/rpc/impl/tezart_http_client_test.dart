@@ -95,10 +95,8 @@ void main() {
       test("calls client's get", () async {
         await subject();
 
-        verifyInOrder([
-          client.options,
-          client.get(path, queryParameters: params),
-        ]);
+        verify(client.options);
+        verify(client.get(path, queryParameters: params));
 
         verifyNoMoreInteractions(client);
       });

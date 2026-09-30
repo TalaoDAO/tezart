@@ -37,6 +37,8 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   plugin_platform_interface: ^2.0.2
 
+  flutter: any
+  flutter_js: any
 dev_dependencies:
   lints: ^1.0.1 # linter
   build_runner: ^2.14.1
@@ -44,6 +46,7 @@ dev_dependencies:
   test: ^1.20.1
 
 # The following section is specific to Flutter packages.
+  flutter_test: any
 flutter:
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)

@@ -41,6 +41,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+dependency_overrides:
+  # tezart resolves bip39 from the web3_factory workspace; outside it, pub.dev's
+  # bip39 1.0.6 would be picked, and it requires pointycastle ^3.
+  bip39:
+    path: ../../bip39
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
